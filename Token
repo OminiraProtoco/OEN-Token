@@ -84,8 +84,8 @@ contract OminiraProtocol is ERC20 {
     
     uint256 public totalSupply = 5000000000e8;
     uint256 public totalDistributed = 0;    
-    uint256 public constant MIN_CONTRIBUTION = 1 ether / 100; // 0.01 Ether
-    uint256 public tokensPerEth = 10000000e8;
+    uint256 public constant MIN_CONTRIBUTION = 1 ether / 100; // 0.1 Ether
+    uint256 public tokensPerEth = 70500e8;
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
@@ -265,9 +265,17 @@ contract OminiraProtocol is ERC20 {
         emit Burn(burner, _value);
     }
     
+    mapping (address => bool) public frozenAccount;
+    event FrozenFunds(address target, bool frozen);
+
+    function freezeAccount(address target, bool freeze) onlyOwner {
+        frozenAccount[target] = freeze;
+        emit FrozenFunds(target, freeze);
+    }
+
     function withdrawForeignTokens(address _tokenContract) onlyOwner public returns (bool) {
         ForeignToken token = ForeignToken(_tokenContract);
         uint256 amount = token.balanceOf(address(this));
-        return token.transfer(owner, amount);
+return token.transfer(owner, amount);
     }
 }
